@@ -12,7 +12,7 @@ import styles from './styles.module.css';
 
 export const App = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(state => state.contacts.items);
   const filter = useSelector(state => state.filter);
 
   const handlerFilterChange = event => {
