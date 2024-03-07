@@ -1,6 +1,17 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFilter } from '../../redux/selectors';
+import { changeFilter } from '../../redux/filterSlice';
 import styles from './styles.module.css';
-export const Filter = ({ filter, onChange }) => {
+
+export const Filter = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector(getFilter);
+
+  const handlerFilterChange = event => {
+    const { value } = event.target;
+    dispatch(changeFilter(value));
+  };
   return (
     <label className={styles.label}>
       <span>Fined company by name</span>
@@ -11,7 +22,7 @@ export const Filter = ({ filter, onChange }) => {
         pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
         title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
         required
-        onChange={onChange}
+        onChange={handlerFilterChange}
       />
     </label>
   );

@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from '../../redux/contactsSlice';
+import { getContacts } from '../../redux/selectors';
 import styles from './styles.module.css';
-export const ContactForm = ({ onSubmit }) => {
+export const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -13,15 +18,25 @@ export const ContactForm = ({ onSubmit }) => {
     SET_VALUE_MAP[name](value);
   };
 
-  const handleSubmit = event => {
+  const checkNameDuplicate = name => {
+    return contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+  };
+
+  const handlerAddContact = event => {
     event.preventDefault();
-    onSubmit({ name, number });
+    if (checkNameDuplicate(name)) {
+      alert(`${name} is already in contacts`);
+      return;
+    }
+    dispatch(addContact({ name, number }));
     setName('');
     setNumber('');
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handlerAddContact}>
       <label className={styles.label}>
         <span className={styles['label-text']}>Name</span>
         <input
